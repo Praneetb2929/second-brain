@@ -1,0 +1,20 @@
+Neural Networks and Deep Learning - My Notes
+
+Neural networks are computing systems inspired by biological neural networks in animal brains.
+They consist of layers of interconnected nodes called neurons.
+
+Deep learning refers to neural networks with many layers, called deep neural networks.
+The more layers, the more abstract features the model can learn.
+
+Transformers are a type of deep learning model introduced in 2017.
+They use a mechanism called attention to weigh the importance of different parts of the input.
+Transformers are the foundation of modern LLMs like GPT and Gemini.
+
+RAG stands for Retrieval Augmented Generation.
+It combines a retrieval system with a language model.
+The retrieval system fetches relevant documents, and the LLM generates an answer based on them.
+RAG reduces hallucination because the model is grounded in real retrieved content.
+
+ChromaDB is a vector database used to store embeddings.
+Embeddings are numerical representations of text that capture semantic meaning.
+Similar texts have embeddings that are close together in vector space.
