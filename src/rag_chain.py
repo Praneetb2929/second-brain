@@ -5,7 +5,19 @@ from langchain_groq import ChatGroq
 from src.prompts import RAG_PROMPT
 from src.retriever import retrieve
 
-load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env")
+# Load .env for local development
+try:
+    load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env")
+except:
+    pass
+
+def get_api_key(key_name):
+    # Try Streamlit secrets first (cloud), then .env (local)
+    try:
+        import streamlit as st
+        return st.secrets[key_name]
+    except:
+        return os.getenv(key_name)
 
 def ask(question):
     chunks = retrieve(question, k=4)
@@ -24,10 +36,9 @@ def ask(question):
         question=question
     )
 
-    # Using Groq with Llama3 — free and fast
     llm = ChatGroq(
         model="llama-3.1-8b-instant",
-        groq_api_key=os.getenv("GROQ_API_KEY"),
+        groq_api_key=get_api_key("GROQ_API_KEY"),
         temperature=0.2
     )
 
