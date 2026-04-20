@@ -1,23 +1,33 @@
-from src.vector_store import load_vector_store
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-def retrieve(query, k=4):
-    """
-    query: the user's question as a string
-    k: how many chunks to retrieve (4 is a good balance)
-    """
-    # Load the existing vector store from disk
-    vector_store = load_vector_store()
+try:
+    load_dotenv(dotenv_path=Path(__file__).parent.parent / ".env")
+except:
+    pass
 
-    # similarity_search embeds the query and finds
-    # the k most similar chunks in ChromaDB
-    results = vector_store.similarity_search(query, k=k)
+def get_api_key(key_name):
+    try:
+        import streamlit as st
+        return st.secrets[key_name]
+    except:
+        return os.getenv(key_name)
 
-    # Each result has .page_content (the text) and .metadata (source filename)
-    chunks = []
-    for result in results:
-        chunks.append({
-            "text": result.page_content,
-            "source": result.metadata.get("source", "unknown")
-        })
+def get_embedding_model():
+    api_key = get_api_key("GOOGLE_API_KEY")
 
-    return chunks
+    if not api_key:
+        raise ValueError("GOOGLE_API_KEY not found!")
+
+    embeddings = GoogleGenerativeAIEmbeddings(
+        model="models/gemini-embedding-001",
+        google_api_key=api_key
+    )
+    return embeddings
+
+def embed_texts(texts):
+    model = get_embedding_model()
+    vectors = model.embed_documents(texts)
+    return vectors
