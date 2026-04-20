@@ -4,6 +4,6 @@ langchain-google-genai
 langchain-groq
 chromadb
 streamlit
-pymupdf
+PyMuPDF
 python-dotenv
 google-generativeai
